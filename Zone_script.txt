@@ -1,0 +1,18 @@
+#!/bin/bash
+ 
+echo -n "==> Enter a new domain name (domain.com): "
+read DOMAIN
+echo -n "==> Enter the IP Address (192.168.0.1): "
+read WWWIP
+echo "Setting up files for $DOMAIN at $WWWIP"
+ 
+./mkzone.sh $DOMAIN $WWWIP > /etc/bind/zones/$DOMAIN.db
+ 
+echo "Adding zone to named.conf.local"
+>> /etc/bind/named.conf.local
+ 
+echo "Restarting Bind"
+/etc/init.d/bind9 restart
+ 
+echo "Running nslookup"
+nslookup $DOMAIN
